@@ -13,7 +13,7 @@ $posts = [
     [
         "title" => "Игра престолов",
         "type" => "post-text",
-        "content" => "Не могу дождаться начала финального сезона своего любимого сериала!",
+        "content" => "Не могу дождаться начала финального сезона своего любимого сериала! Повседневная практика показывает, что постоянный количественный рост и сфера нашей активности обеспечивает широкому кругу (специалистов) участие в формировании системы обучения кадров, соответствует насущным потребностям.",
         "user" => "Владик",
         "avatar" => "userpic.jpg"
     ],
@@ -39,6 +39,23 @@ $posts = [
         "avatar" => "userpic.jpg"
     ]
 ];
+
+$text_limit = 300;
+
+function crop_text($text, $limit) {
+    $text_array = explode(" ", $text);
+    $new_string = "";
+    $words_counter = 0;
+
+    while (strlen($new_string) < $limit) {
+        $new_string = $new_string . " " . $text_array[$words_counter];
+        $words_counter++;
+        if (strlen($new_string) >= $limit) {
+            break;
+        };
+    };
+    return $new_string;
+};
 
 ?>
 <!DOCTYPE html>
@@ -249,11 +266,16 @@ $posts = [
                 <div class="post__main">
                     <?php if ($post["type"] === "post-quote"): ?>
                         <blockquote>
-                            <p><?=$post["content"];?></p>
+                            <p><?= $post["content"]; ?></p>
                             <cite>Неизвестный Автор</cite>
                         </blockquote>
                     <?php elseif ($post["type"] === "post-text"): ?>
-                        <p><?=$post["content"];?></p>
+                        <?php if (strlen($post["content"]) <= $text_limit): ?>
+                            <p><?= $post["content"]; ?></p>
+                        <?php else: ?>
+                            <p><?= crop_text($post["content"], $text_limit) . "..."; ?></p>
+                            <a class="post-text__more-link" href="#">Читать далее</a>
+                        <?php endif; ?>
                     <?php elseif ($post["type"] === "post-photo"): ?>
                         <div class="post-photo__image-wrapper">
                             <img src="img/<?=$post["content"];?>" alt="Фото от пользователя" width="360" height="240">
