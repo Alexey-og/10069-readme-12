@@ -1,3 +1,81 @@
+<?
+
+$current_date = strtotime(date('Y-m-d H:i:s'));
+
+function generate_random_date($index) {
+    $deltas = [['seconds' => 59], ['minutes' => 59], ['hours' => 23], ['days' => 6], ['weeks' => 4], ['months' => 11], ['years' => 15]];
+    $dcnt = count($deltas);
+
+    if ($index < 0) {
+        $index = 0;
+    }
+
+    if ($index >= $dcnt) {
+        $index = $dcnt - 1;
+    }
+
+    $delta = $deltas[$index];
+    $timeval = rand(1, current($delta));
+    $timename = key($delta);
+
+    $ts = strtotime("$timeval $timename ago");
+    $dt = date('Y-m-d H:i:s', $ts);
+
+    return $dt;
+}
+
+function get_noun_plural_form(int $number, string $one, string $two, string $many): string {
+    $number = (int)$number;
+    $mod10 = $number % 10;
+    $mod100 = $number % 100;
+
+    switch (true) {
+        case ($mod100 >= 11 && $mod100 <= 20):
+            return $many;
+
+        case ($mod10 > 5):
+            return $many;
+
+        case ($mod10 === 1):
+            return $one;
+
+        case ($mod10 >= 2 && $mod10 <= 4):
+            return $two;
+
+        default:
+            return $many;
+    }
+}
+
+function show_passed_time($current, $past) {
+    $diff_time = $current - strtotime($past);
+    $sec_in_min = 60;
+    $sec_in_hour = $sec_in_min * 60;
+    $sec_in_day = $sec_in_hour * 24;
+    $sec_in_week = $sec_in_day * 7;
+    $sec_in_month = $sec_in_day * 30;
+    $sec_in_year = $sec_in_day * 365;
+
+    if ($diff_time < $sec_in_min) {
+        return $diff_time . get_noun_plural_form($diff_time, " секунда", " секунды", " секунд") . " назад";
+    } else if ($diff_time >= $sec_in_min && $diff_time < $sec_in_hour) {
+        return round($diff_time/$sec_in_min) . get_noun_plural_form(round($diff_time/$sec_in_min), " минута", " минуты", " минут") . " назад";
+    } else if ($diff_time >= $sec_in_hour && $diff_time < $sec_in_day) {
+        return round($diff_time/$sec_in_hour) . get_noun_plural_form(round($diff_time/$sec_in_hour), " час", " часа", " часов") . " назад";
+    } else if ($diff_time >= $sec_in_day && $diff_time < $sec_in_week) {
+        return round($diff_time/$sec_in_day) . get_noun_plural_form(round($diff_time/$sec_in_day), " день", " дня", " дней") . " назад";
+    } else if ($diff_time >= $sec_in_week && $diff_time < $sec_in_month) {
+        return round($diff_time/$sec_in_week) . get_noun_plural_form(round($diff_time/$sec_in_week), " неделя", " недели", " недель") . " назад";
+    } else if ($diff_time >= $sec_in_month && $diff_time < $sec_in_year) {
+        return round($diff_time/$sec_in_month) . get_noun_plural_form(round($diff_time/$sec_in_month), " месяц", " месяца", " месяцев") . " назад";
+    } else {
+        return round($diff_time/$sec_in_year) . get_noun_plural_form(round($diff_time/$sec_in_year), " год", " года", " лет") . " назад";
+    }
+}
+
+?>
+
+
 <div class="container">
     <h1 class="page__title page__title--popular">Популярное</h1>
 </div>
@@ -84,8 +162,11 @@
         </div>
     </div>
     <div class="popular__posts">
+    <? $i = 0; ?>
 
         <?php foreach ($posts as $post): ?>
+        <? $random_date = generate_random_date($i) ?>
+        <? $passed_time = show_passed_time($current_date, $random_date); ?>
         <article class="popular__post post <?=$post["type"];?>">
             <header class="post__header">
                 <h2><?=htmlspecialchars($post["title"]);?></h2>
@@ -138,13 +219,13 @@
             </div>
             <footer class="post__footer">
                 <div class="post__author">
-                    <a class="post__author-link" href="#" title="Автор">
+                    <a class="post__author-link" href="#" title="<?=$random_date?>">
                         <div class="post__avatar-wrapper">
                             <img class="post__author-avatar" src="img/<?=$post["avatar"];?>" alt="Аватар пользователя">
                         </div>
                         <div class="post__info">
                             <b class="post__author-name"><?=$post["user"];?></b>
-                            <time class="post__time" datetime="">дата</time>
+                            <time class="post__time" datetime="<?=$random_date?>"><?=$passed_time?></time>
                         </div>
                     </a>
                 </div>
@@ -171,6 +252,7 @@
                 </div>
             </footer>
         </article>
+        <? $i++ ?>
         <?php endforeach; ?>
     </div>
 </div>
