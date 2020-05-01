@@ -91,8 +91,8 @@
         ?>
         <?php foreach ($posts as $i => $post): ?>
         <?php
-            $random_date = generate_random_date($i);
-            $passed_time = show_passed_time($current_date, $random_date);
+            $random_date = generateRandomDate($i);
+            $passed_time = showPassedTime($current_date, $random_date);
         ?>
         <article class="popular__post post <?=$post["type"];?>">
             <header class="post__header">
@@ -108,7 +108,7 @@
                     <?php if (strlen($post["content"]) <= $text_limit): ?>
                         <p><?= htmlspecialchars($post["content"]); ?></p>
                     <?php else: ?>
-                        <p><?= htmlspecialchars(crop_text($post["content"], $text_limit)) . "..."; ?></p>
+                        <p><?= htmlspecialchars(cropText($post["content"], $text_limit)) . "..."; ?></p>
                         <a class="post-text__more-link" href="#">Читать далее</a>
                     <?php endif; ?>
                 <?php elseif ($post["type"] === "post-photo"): ?>

@@ -5,7 +5,7 @@ $user_name = "Алексей";
 
 $text_limit = 300;
 
-function crop_text($text, $limit) {
+function cropText($text, $limit) {
     $text_array = explode(" ", $text);
     $new_string = "";
     $words_counter = 0;
@@ -20,7 +20,7 @@ function crop_text($text, $limit) {
     return $new_string;
 };
 
-function include_template($name, $data) {
+function includeTemplate($name, $data) {
     $name = 'templates/' . $name;
     $result = '';
 
@@ -37,7 +37,7 @@ function include_template($name, $data) {
     return $result;
 }
 
-function generate_random_date($index) {
+function generateRandomDate($index) {
     $deltas = [['minutes' => 59], ['hours' => 23], ['days' => 6], ['weeks' => 4], ['months' => 11], ['years' => 15]];
     $dcnt = count($deltas);
 
@@ -59,30 +59,23 @@ function generate_random_date($index) {
     return $dt;
 }
 
-function get_noun_plural_form(int $number, string $one, string $two, string $many): string {
+function getNounPluralForm(int $number, string $one, string $two, string $many): string {
     $number = (int)$number;
     $mod10 = $number % 10;
     $mod100 = $number % 100;
-
     switch (true) {
-        case ($mod100 >= 11 && $mod100 <= 20):
-            return $many;
-
-        case ($mod10 > 5):
-            return $many;
-
         case ($mod10 === 1):
             return $one;
-
         case ($mod10 >= 2 && $mod10 <= 4):
             return $two;
-
+        case ($mod100 >= 11 && $mod100 <= 20):
+            return $many;
         default:
             return $many;
     }
 }
 
-function show_passed_time($current, $past) {
+function showPassedTime($current, $past) {
     $time_difference = $current - strtotime($past);
     $sec_in_min = 60;
     $sec_in_hour = $sec_in_min * 60;
@@ -92,18 +85,18 @@ function show_passed_time($current, $past) {
     $sec_in_year = $sec_in_day * 365;
 
     if ($time_difference < $sec_in_min) {
-        return $time_difference . get_noun_plural_form($time_difference, " секунда", " секунды", " секунд") . " назад";
+        return $time_difference . getNounPluralForm($time_difference, " секунда", " секунды", " секунд") . " назад";
     } else if ($time_difference >= $sec_in_min && $time_difference < $sec_in_hour) {
-        return floor($time_difference/$sec_in_min) . get_noun_plural_form(floor($time_difference/$sec_in_min), " минута", " минуты", " минут") . " назад";
+        return floor($time_difference/$sec_in_min) . getNounPluralForm(floor($time_difference/$sec_in_min), " минута", " минуты", " минут") . " назад";
     } else if ($time_difference >= $sec_in_hour && $time_difference < $sec_in_day) {
-        return floor($time_difference/$sec_in_hour) . get_noun_plural_form(floor($time_difference/$sec_in_hour), " час", " часа", " часов") . " назад";
+        return floor($time_difference/$sec_in_hour) . getNounPluralForm(floor($time_difference/$sec_in_hour), " час", " часа", " часов") . " назад";
     } else if ($time_difference >= $sec_in_day && $time_difference < $sec_in_week) {
-        return floor($time_difference/$sec_in_day) . get_noun_plural_form(floor($time_difference/$sec_in_day), " день", " дня", " дней") . " назад";
+        return floor($time_difference/$sec_in_day) . getNounPluralForm(floor($time_difference/$sec_in_day), " день", " дня", " дней") . " назад";
     } else if ($time_difference >= $sec_in_week && $time_difference < $sec_in_month) {
-        return floor($time_difference/$sec_in_week) . get_noun_plural_form(floor($time_difference/$sec_in_week), " неделя", " недели", " недель") . " назад";
+        return floor($time_difference/$sec_in_week) . getNounPluralForm(floor($time_difference/$sec_in_week), " неделя", " недели", " недель") . " назад";
     } else if ($time_difference >= $sec_in_month && $time_difference < $sec_in_year) {
-        return floor($time_difference/$sec_in_month) . get_noun_plural_form(floor($time_difference/$sec_in_month), " месяц", " месяца", " месяцев") . " назад";
+        return floor($time_difference/$sec_in_month) . getNounPluralForm(floor($time_difference/$sec_in_month), " месяц", " месяца", " месяцев") . " назад";
     } else {
-        return floor($time_difference/$sec_in_year) . get_noun_plural_form(floor($time_difference/$sec_in_year), " год", " года", " лет") . " назад";
+        return floor($time_difference/$sec_in_year) . getNounPluralForm(floor($time_difference/$sec_in_year), " год", " года", " лет") . " назад";
     }
 }
