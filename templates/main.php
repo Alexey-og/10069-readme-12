@@ -85,7 +85,15 @@
     </div>
     <div class="popular__posts">
 
-        <?php foreach ($posts as $post): ?>
+        <?php
+            date_default_timezone_set('Europe/Moscow');
+            $current_date = strtotime(date('Y-m-d H:i:s'));
+        ?>
+        <?php foreach ($posts as $i => $post): ?>
+        <?php
+            $random_date = generateRandomDate($i);
+            $passed_time = showPassedTime($current_date, $random_date);
+        ?>
         <article class="popular__post post <?=$post["type"];?>">
             <header class="post__header">
                 <h2><?=htmlspecialchars($post["title"]);?></h2>
@@ -100,7 +108,7 @@
                     <?php if (strlen($post["content"]) <= $text_limit): ?>
                         <p><?= htmlspecialchars($post["content"]); ?></p>
                     <?php else: ?>
-                        <p><?= htmlspecialchars(crop_text($post["content"], $text_limit)) . "..."; ?></p>
+                        <p><?= htmlspecialchars(cropText($post["content"], $text_limit)) . "..."; ?></p>
                         <a class="post-text__more-link" href="#">Читать далее</a>
                     <?php endif; ?>
                 <?php elseif ($post["type"] === "post-photo"): ?>
@@ -138,13 +146,13 @@
             </div>
             <footer class="post__footer">
                 <div class="post__author">
-                    <a class="post__author-link" href="#" title="Автор">
+                    <a class="post__author-link" href="#" title="<?=$random_date?>">
                         <div class="post__avatar-wrapper">
                             <img class="post__author-avatar" src="img/<?=$post["avatar"];?>" alt="Аватар пользователя">
                         </div>
                         <div class="post__info">
                             <b class="post__author-name"><?=$post["user"];?></b>
-                            <time class="post__time" datetime="">дата</time>
+                            <time class="post__time" datetime="<?=$random_date?>"><?=$passed_time?></time>
                         </div>
                     </a>
                 </div>
