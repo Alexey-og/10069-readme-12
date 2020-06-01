@@ -1,7 +1,7 @@
 # Личный проект «Readme»
 
 * Студент: [Алексей Огурцов](https://up.htmlacademy.ru/php/12/user/10069).
-* Наставник: [Сергей Рожков](https://htmlacademy.ru/profile/id1069033).
+* Наставник: [Антон Попов](https://htmlacademy.ru/profile/id78239).
 
 ---
 
