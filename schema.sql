@@ -38,8 +38,7 @@ CREATE TABLE posts (
   hashtag_id INT UNSIGNED NOT NULL,
 
   FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (content_type_id) REFERENCES content_types(id),
-  FOREIGN KEY (hashtag_id) REFERENCES hashtags(id)
+  FOREIGN KEY (content_type_id) REFERENCES content_types(id)
 ) ENGINE=InnoDB COMMENT = 'Пост -- Состоит из заголовка и содержимого. Набор полей, которые будут заполнены, зависит от выбранного типа.';
 
 CREATE TABLE hashtags (
